@@ -252,7 +252,6 @@ rules: {
   react/default-props-match-prop-types: 2,
   react/display-name: 2,
   react/forbid-foreign-prop-types: 2,
-  react/forbid-component-props: [2, {forbid: ["style", "styles"]}],
   react/jsx-boolean-value: 2,
   react/jsx-closing-bracket-location: 2,
   react/jsx-closing-tag-location: 2,

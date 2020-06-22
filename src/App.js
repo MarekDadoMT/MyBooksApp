@@ -9,26 +9,25 @@ import Book from './Book'
 
 const BooksApp = () => {
   const [books, setBooks] = useState([])
-  const [aha, setAha] = useState('')
+  const [bookState, setBookState] = useState('')
 
   useEffect(() => {
     BooksAPI.getAll()
       .then((response) => {
-        console.log(response)
         setBooks(response)
       })
-  }, [aha])
+  }, [bookState])
 
-  const onChageBookState = async (book, e) => {
+  const onChangeBookState = async (book, e) => {
     await BooksAPI.update(book, e)
-    setAha(e)
+    setBookState(e)
   }
 
 
   return (
     <div className="app">
       <Route exact path="/search">
-        <SearchPage books={books} />
+        <SearchPage books={books} onChangeBookState={onChangeBookState} />
       </Route>
 
       <Route exact path="/">
@@ -45,7 +44,7 @@ const BooksApp = () => {
                     {
                       filter(books, {shelf: 'currentlyReading'}).map((book) => {
                         return (
-                          <Book key={book.id} id={book.id} book={book} onChageBookState={onChageBookState} />
+                          <Book key={book.id} id={book.id} book={book} onChangeBookState={onChangeBookState} />
                         )
                       })
                     }
@@ -59,7 +58,7 @@ const BooksApp = () => {
                     {
                       filter(books, {shelf: 'wantToRead'}).map((book) => {
                         return (
-                          <Book key={book.id} id={book.id} book={book} onChageBookState={onChageBookState} />
+                          <Book key={book.id} id={book.id} book={book} onChangeBookState={onChangeBookState} />
                         )
                       })
                     }
@@ -72,7 +71,7 @@ const BooksApp = () => {
                     {
                       filter(books, {shelf: 'read'}).map((book) => {
                         return (
-                          <Book key={book.id} id={book.id} book={book} onChageBookState={onChageBookState} />
+                          <Book key={book.id} id={book.id} book={book} onChangeBookState={onChangeBookState} />
                         )
                       })
                     }
