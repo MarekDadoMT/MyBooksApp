@@ -4,16 +4,12 @@ import {filter} from 'lodash'
 import * as BooksAPI from './BooksAPI'
 import './App.css'
 import SearchPage from './SearchPage'
+import Book from './Book'
 
 
 const BooksApp = () => {
   const [books, setBooks] = useState([])
-  const [options] = useState([
-    {option: 'Currently Reading', value: 'currentlyReading'},
-    {option: 'Want to Read', value: 'wantToRead'},
-    {option: 'Read', value: 'read'},
-    {option: 'None', value: 'none'},
-  ])
+  const [aha, setAha] = useState('')
 
   useEffect(() => {
     BooksAPI.getAll()
@@ -21,7 +17,12 @@ const BooksApp = () => {
         console.log(response)
         setBooks(response)
       })
-  }, [])
+  }, [aha])
+
+  const onChageBookState = async (book, e) => {
+    await BooksAPI.update(book, e)
+    setAha(e)
+  }
 
 
   return (
@@ -42,62 +43,25 @@ const BooksApp = () => {
                 <div className="bookshelf-books">
                   <ol className="books-grid">
                     {
-                      filter(books, {shelf: 'currentlyReading'}).map((book, index) => (
-                        <li key={index}>
-                          <div className="book">
-                            <div
-                                className="book-cover"
-                                style={{width: 128, height: 193,
-                                  backgroundImage: `url(${book.imageLinks.thumbnail})`}}
-                            />
-                            <div>
-                              <select>
-                                {
-                                  options.map(({option, value}) => (
-                                    <option key={value} value={value}>
-                                      {option}
-                                    </option>
-                                  ))
-                                }
-                              </select>
-                            </div>
-                            <div className="book-title">{book.title}</div>
-                            <div className="book-authors">{book.authors}</div>
-                          </div>
-                        </li>
-                      ))
+                      filter(books, {shelf: 'currentlyReading'}).map((book) => {
+                        return (
+                          <Book key={book.id} id={book.id} book={book} onChageBookState={onChageBookState} />
+                        )
+                      })
                     }
                   </ol>
                 </div>
+
 
                 <h2 className="bookshelf-title">Want to Read</h2>
                 <div className="bookshelf-books">
                   <ol className="books-grid">
                     {
-                      filter(books, {shelf: 'wantToRead'}).map((book, index) => (
-                        <li key={index}>
-                          <div className="book">
-                            <div
-                                className="book-cover"
-                                style={{width: 128, height: 193,
-                                  backgroundImage: `url(${book.imageLinks.thumbnail})`}}
-                            />
-                            <div>
-                              <select>
-                                {
-                                  options.map(({option, value}) => (
-                                    <option key={value} value={value}>
-                                      {option}
-                                    </option>
-                                  ))
-                                }
-                              </select>
-                            </div>
-                            <div className="book-title">{book.title}</div>
-                            <div className="book-authors">{book.authors}</div>
-                          </div>
-                        </li>
-                      ))
+                      filter(books, {shelf: 'wantToRead'}).map((book) => {
+                        return (
+                          <Book key={book.id} id={book.id} book={book} onChageBookState={onChageBookState} />
+                        )
+                      })
                     }
                   </ol>
                 </div>
@@ -106,30 +70,11 @@ const BooksApp = () => {
                 <div className="bookshelf-books">
                   <ol className="books-grid">
                     {
-                      filter(books, {shelf: 'read'}).map((book, index) => (
-                        <li key={index}>
-                          <div className="book">
-                            <div
-                                className="book-cover"
-                                style={{width: 128, height: 193,
-                                  backgroundImage: `url(${book.imageLinks.thumbnail})`}}
-                            />
-                            <div>
-                              <select>
-                                {
-                                  options.map(({option, value}) => (
-                                    <option key={value} value={value}>
-                                      {option}
-                                    </option>
-                                  ))
-                                }
-                              </select>
-                            </div>
-                            <div className="book-title">{book.title}</div>
-                            <div className="book-authors">{book.authors}</div>
-                          </div>
-                        </li>
-                      ))
+                      filter(books, {shelf: 'read'}).map((book) => {
+                        return (
+                          <Book key={book.id} id={book.id} book={book} onChageBookState={onChageBookState} />
+                        )
+                      })
                     }
                   </ol>
                 </div>
@@ -143,6 +88,7 @@ const BooksApp = () => {
             </Link>
           </div>
         </div>
+
       </Route>
 
     </div>

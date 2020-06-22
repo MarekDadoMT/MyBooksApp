@@ -20,6 +20,7 @@ const SearchPage = () => {
     } else {
       BooksAPI.search(query)
         .then((response) => {
+          console.log(response)
           setSearchedBooks(filter(response, 'imageLinks.thumbnail'))
         })
     }
