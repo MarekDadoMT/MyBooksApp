@@ -9,7 +9,7 @@ import Book from './Book'
 
 const BooksApp = () => {
   const [books, setBooks] = useState([])
-  const [bookState, setBookState] = useState('')
+  const [renderState, setRenderState] = useState([])
 
   useEffect(() => {
     const fetchData = () => {
@@ -20,11 +20,11 @@ const BooksApp = () => {
     }
 
     fetchData()
-  }, [bookState])
+  }, [renderState])
 
   const onChangeBookState = async (book, e) => {
     await BooksAPI.update(book, e)
-    setBookState(e)
+    await setRenderState(books)
   }
 
 

@@ -16,6 +16,7 @@ const Book = (props) => {
 
   const isMountedRef = useRef(null)
   const [bookShelf, setBookShelf] = useState({value: ''})
+  const [bookState, setBookState] = useState('')
 
   useEffect(() => {
     isMountedRef.current = true
@@ -28,10 +29,11 @@ const Book = (props) => {
     return () => {
       isMountedRef.current = false
     }
-  }, [props.book.id])
+  }, [bookState])
 
-  const handleChange = (e) => {
-    props.onChangeBookState(props.book, e.value)
+  const handleChange = async (e) => {
+    await props.onChangeBookState(props.book, e.value)
+    setBookState(e)
   }
 
   return (
