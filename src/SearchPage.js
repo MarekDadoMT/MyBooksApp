@@ -11,24 +11,21 @@ const SearchPage = (props) => {
   const [searchedBooks, setSearchedBooks] = useState([])
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = () => {
       if (isEmpty(query)) {
         setSearchedBooks([])
       } else {
-        BooksAPI.search(query)
-          .then(async (response) => {
-            await setSearchedBooks(filter(response, 'imageLinks.thumbnail'))
-          })
+        BooksAPI.search(query).then((response) => {
+          setSearchedBooks(filter(response, 'imageLinks.thumbnail'))
+        })
       }
     }
     fetchData()
-
   }, [query])
 
   const updateQuery = (e) => {
     setQuery(e)
   }
-
 
   return (
     <div className="search-books">
@@ -51,17 +48,14 @@ const SearchPage = (props) => {
       </div>
 
       <div className="search-books-results">
-        <button type="button">Push</button>
-      </div>
-
-      <div className="search-books-results">
         <ol className="books-grid">
           {
             searchedBooks.map((book) => {
               return (
-                <Book key={book.id} id={book.id} book={book} onChangeBookState={props.onChangeBookState} />
+                <Book key={book.id} book={book} onChangeBookState={props.onChangeBookState} />
               )
-            })}
+            })
+          }
         </ol>
       </div>
     </div>
@@ -69,7 +63,6 @@ const SearchPage = (props) => {
 }
 
 SearchPage.propTypes = {
-  books: PropTypes.array,
   onChangeBookState: PropTypes.func,
 }
 

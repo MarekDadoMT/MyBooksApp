@@ -12,10 +12,14 @@ const BooksApp = () => {
   const [bookState, setBookState] = useState('')
 
   useEffect(() => {
-    BooksAPI.getAll()
-      .then((response) => {
-        setBooks(response)
-      })
+    const fetchData = () => {
+      BooksAPI.getAll()
+        .then((response) => {
+          setBooks(response)
+        })
+    }
+
+    fetchData()
   }, [bookState])
 
   const onChangeBookState = async (book, e) => {
@@ -27,7 +31,7 @@ const BooksApp = () => {
   return (
     <div className="app">
       <Route exact path="/search">
-        <SearchPage books={books} onChangeBookState={onChangeBookState} />
+        <SearchPage onChangeBookState={onChangeBookState} />
       </Route>
 
       <Route exact path="/">
@@ -44,13 +48,12 @@ const BooksApp = () => {
                     {
                       filter(books, {shelf: 'currentlyReading'}).map((book) => {
                         return (
-                          <Book key={book.id} id={book.id} book={book} onChangeBookState={onChangeBookState} />
+                          <Book key={book.id} book={book} onChangeBookState={onChangeBookState} />
                         )
                       })
                     }
                   </ol>
                 </div>
-
 
                 <h2 className="bookshelf-title">Want to Read</h2>
                 <div className="bookshelf-books">
@@ -58,7 +61,7 @@ const BooksApp = () => {
                     {
                       filter(books, {shelf: 'wantToRead'}).map((book) => {
                         return (
-                          <Book key={book.id} id={book.id} book={book} onChangeBookState={onChangeBookState} />
+                          <Book key={book.id} book={book} onChangeBookState={onChangeBookState} />
                         )
                       })
                     }
@@ -71,7 +74,7 @@ const BooksApp = () => {
                     {
                       filter(books, {shelf: 'read'}).map((book) => {
                         return (
-                          <Book key={book.id} id={book.id} book={book} onChangeBookState={onChangeBookState} />
+                          <Book key={book.id} book={book} onChangeBookState={onChangeBookState} />
                         )
                       })
                     }
@@ -87,7 +90,6 @@ const BooksApp = () => {
             </Link>
           </div>
         </div>
-
       </Route>
 
     </div>

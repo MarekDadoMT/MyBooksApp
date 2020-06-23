@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import PropTypes from 'prop-types'
 import Select from 'react-select'
 import * as BooksAPI from './BooksAPI'
@@ -14,38 +14,24 @@ const Book = (props) => {
     {value: 'none', label: 'None', disabled: false},
   ]
 
-  const [bookState, setBookState] = useState('')
+  const isMountedRef = useRef(null)
+  const [bookShelf, setBookShelf] = useState({value: ''})
 
   useEffect(() => {
+    isMountedRef.current = true
     BooksAPI.get(props.book.id)
-      .then((response) => setBookState(response.shelf))
-    console.log(bookState)
-  }, [])
+      .then((response) => {
+        if (isMountedRef.current) {
+          setBookShelf({value: response.shelf})
+        }
+      })
+    return () => {
+      isMountedRef.current = false
+    }
+  }, [props.book.id])
 
   const handleChange = (e) => {
     props.onChangeBookState(props.book, e.value)
-  }
-
-  const decide = () => {
-    if (props.book.shelf) {
-      return (
-        <Select
-            defaultValue={props.book.shelf}
-            options={options}
-            isOptionDisabled={(option) => option.disabled}
-            onChange={handleChange}
-        />
-      )
-    } else {
-      return (
-        <Select
-            defaultValue={{value: 'none'}}
-            options={options}
-            isOptionDisabled={(option) => option.disabled}
-            onChange={handleChange}
-        />
-      )
-    }
   }
 
   return (
@@ -57,7 +43,20 @@ const Book = (props) => {
               backgroundImage: `url(${props.book.imageLinks.thumbnail})`}}
         />
         <div>
-          {decide()}
+          <Select
+              value={bookShelf}
+              options={options}
+              isOptionDisabled={(option) => option.disabled}
+              onChange={handleChange}
+              theme={(theme) => ({
+                ...theme,
+                borderRadius: 0,
+                colors: {
+                  ...theme.colors,
+                  primary: 'green',
+                },
+              })}
+          />
         </div>
 
         <div className="book-title">{props.book.title}</div>
@@ -65,7 +64,6 @@ const Book = (props) => {
       </div>
     </li>
   )
-
 }
 
 Book.propTypes = {
