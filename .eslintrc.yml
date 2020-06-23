@@ -305,7 +305,6 @@ rules: {
 
   # eslint-plugin-react-hooks
   react-hooks/rules-of-hooks: 2,
-  react-hooks/exhaustive-deps: 1,
 
   # eslint-plugin-jsx-control-statements
   jsx-control-statements/jsx-choose-not-empty: 2,

@@ -1,6 +1,8 @@
 import React, {useState, useEffect, useRef} from 'react'
 import PropTypes from 'prop-types'
 import Select from 'react-select'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faSpinner} from '@fortawesome/free-solid-svg-icons'
 import * as BooksAPI from './BooksAPI'
 
 
@@ -16,7 +18,7 @@ const Book = (props) => {
 
   const isMountedRef = useRef(null)
   const [bookShelf, setBookShelf] = useState({value: ''})
-  const [bookState, setBookState] = useState('')
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     isMountedRef.current = true
@@ -25,15 +27,16 @@ const Book = (props) => {
         if (isMountedRef.current) {
           setBookShelf({value: response.shelf})
         }
+        setLoading(false)
       })
     return () => {
       isMountedRef.current = false
     }
-  }, [bookState])
+  }, [loading])
 
   const handleChange = async (e) => {
+    setLoading(true)
     await props.onChangeBookState(props.book, e.value)
-    setBookState(e)
   }
 
   return (
@@ -44,21 +47,24 @@ const Book = (props) => {
             style={{width: 128, height: 193,
               backgroundImage: `url(${props.book.imageLinks.thumbnail})`}}
         />
-        <div>
-          <Select
-              value={bookShelf}
-              options={options}
-              isOptionDisabled={(option) => option.disabled}
-              onChange={handleChange}
-              theme={(theme) => ({
-                ...theme,
-                borderRadius: 0,
-                colors: {
-                  ...theme.colors,
-                  primary: 'green',
-                },
-              })}
-          />
+        <div className="hoho">
+          {loading && <FontAwesomeIcon icon={faSpinner} className="fa-spin fa-2x fa-fw" />}
+          {
+            !loading &&
+            <Select
+                value={bookShelf}
+                options={options}
+                isOptionDisabled={(option) => option.disabled}
+                onChange={handleChange}
+                theme={(theme) => ({
+                  ...theme,
+                  colors: {
+                    ...theme.colors,
+                    primary: 'green',
+                  },
+                })}
+            />
+          }
         </div>
 
         <div className="book-title">{props.book.title}</div>

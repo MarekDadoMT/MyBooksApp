@@ -27,7 +27,6 @@ const BooksApp = () => {
     await setRenderState(books)
   }
 
-
   return (
     <div className="app">
       <Route exact path="/search">
@@ -39,10 +38,12 @@ const BooksApp = () => {
           <div className="list-books-title">
             <h1>MyReads</h1>
           </div>
+
           <div className="list-books-content">
             <div>
               <div className="bookshelf">
                 <h2 className="bookshelf-title">Currently Reading</h2>
+                <i className="fas fa-spinner" />
                 <div className="bookshelf-books">
                   <ol className="books-grid">
                     {
